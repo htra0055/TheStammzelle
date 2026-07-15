@@ -1,0 +1,13 @@
+
+
+
+
+TheStammzelle-Visualization/
+├── index.html          // Main page loader (Unchanged)
+├── README.md           // Documentation (Updated)
+├── .gitignore
+└── js/
+    ├── sketch.js       # The main p5.js loop: setup() and draw(). Calls all modules.
+    ├── Particle.js     # Class definition for a single cell. (The "What")
+    ├── Forces.js       # Math functions for attraction, repulsion, chemokinesis. (The "How Fast")
+    └── SignalSources.js # Defines constant biological sources (Hormones, Niche locations). 
