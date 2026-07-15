@@ -7,6 +7,7 @@ TheStammzelle-Visualization/
 ├── README.md           // Documentation (Updated)
 ├── .gitignore
 └── js/
+    ├── constants.js #Stores fixed values used by the simulation.
     ├── sketch.js       # The main p5.js loop: setup() and draw(). Calls all modules.
     ├── Particle.js     # Class definition for a single cell. (The "What")
     ├── Forces.js       # Math functions for attraction, repulsion, chemokinesis. (The "How Fast")
