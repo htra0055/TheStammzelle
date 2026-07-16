@@ -7,3 +7,9 @@ Agent-based modeling of morphogenetic systems: Advantages and challenges
 Chad M. Glen,Melissa L. Kemp ,Eberhard O. Voit 
 Published: March 28, 2019
 https://doi.org/10.1371/journal.pcbi.1006577
+
+
+2. https://mrob.com/pub/comp/xmorphia/
+Reaction-Diffusion by the Gray-Scott Model: Pearson's Parametrization    
+Robert Munafo's home pages on AWS    © 1996-2024 Robert P. Munafo. 
+

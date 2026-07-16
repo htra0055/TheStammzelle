@@ -32,6 +32,7 @@ The simulation translates complex embryological phenomena into mathematical forc
 The repository is modularised into highly focused files following clean software design patterns:
 
 TheStammzelle-Visualization/
+
 ├── index.html            # Main page loader and p5.js context injector
 ├── README.md             # Project documentation, rules, and architecture map
 ├── .gitignore            # Version control exclusions

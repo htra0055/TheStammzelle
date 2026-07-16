@@ -34,11 +34,15 @@ function setup() {
 
     const pauseButton = document.getElementById('pauseButton');
     const resetButton = document.getElementById('resetButton');
+    const clearButton = document.getElementById('clearButton');
     if (pauseButton) {
         pauseButton.addEventListener('click', togglePause);
     }
     if (resetButton) {
         resetButton.addEventListener('click', resetSimulation);
+    }
+    if (clearButton) {
+        clearButton.addEventListener('click', clearTrails);
     }
 
     console.log("--- TheStammzelle Simulation Engine Initialized ---");
@@ -145,6 +149,13 @@ function resetSimulation() {
     if (pauseButton) {
         pauseButton.textContent = 'Pause';
     }
+}
+
+function clearTrails() {
+    particles = [];
+    hoveredParticle = null;
+    background(220, 40, 12);
+    renderAllSignalSources();
 }
 
 function cycleCellType(currentType) {
