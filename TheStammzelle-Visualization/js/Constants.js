@@ -17,5 +17,8 @@ const COLOR_MAP = {
 
 const CONSTANTS = {
     MAX_ENERGY: 150,
-    SIGNAL_DECAY_FACTOR: 0.001
+    SIGNAL_DECAY_FACTOR: 0.001,
+    COMMITMENT_THRESHOLD: 0.08,       // concentration a Naive ESC needs to feel to commit
+    SPECIALIZATION_FRAMES: 240,       // ~4s at 60fps of being Committed
+    SPECIALIZATION_NEIGHBOR_COUNT: 5  // same-type neighbors that fast-track specialization
 };

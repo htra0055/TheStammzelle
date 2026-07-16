@@ -5,12 +5,12 @@ let particles = [];
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
- 
+
     /*
     Canvas view: consistent dark navy start; set HSB mode BEFORE using it
     */
-    colorMode(HSB, 360, 100, 100, 255); 
-    background(220, 40, 12);            
+    colorMode(HSB, 360, 100, 100, 255);
+    background(220, 40, 12);
     frameRate(60);
 
     // We wait until the window is ready before calculating coordinates:
@@ -30,9 +30,41 @@ function setup() {
 
 
 
+/**
+ * VISUAL MAPPING FUNCTION: Maps biological state to visible color/size (HSB).
+ */
+
+function getCellColor(cellType, stage) {
+    let hue = 200;
+    let saturation = 80;
+
+    if (cellType === 'CardioPrecursor') {
+        hue = 15;
+        saturation = 90;
+    } else if (cellType === 'Endothelial') {
+        hue = 200;
+        saturation = 70;
+    }
+
+    // Fixed: map() was being called with array args (invalid p5 signature),
+    // so brightness was computed then silently dropped. Now it's a real
+    // stage → brightness lookup, and it's actually returned/used.
+    let brightness;
+    switch (stage) {
+        case 'Naive': brightness = 60; break;
+        case 'Committed': brightness = 95; break;
+        case 'Specialized': brightness = 100; break;
+        default: brightness = 60;
+    }
+
+    return [hue, saturation, brightness];
+}
+
+
 function draw() {
-    // HSB: hue 220° (blue-navy), low saturation, but real brightness (12%) so trails don't vanish
     background(220, 40, 12, 20);
+
+    renderAllSignalSources(); // draw niche glows BEFORE particles so cells render on top
 
     let newParticles = [];
 
@@ -54,31 +86,11 @@ function draw() {
 }
 
 function drawParticle(particle) {
-    let [hue, saturation] = getCellColor(particle.cellType, particle.stage);
+    let [hue, saturation, brightness] = getCellColor(particle.cellType, particle.stage);
     const alpha = constrain(140 * (particle.energy / CONSTANTS.MAX_ENERGY), 20, 140);
 
-    stroke(hue, saturation, 90, alpha);
+    stroke(hue, saturation, brightness, alpha);
     strokeWeight(max(1, particle.radius * 0.9));
     point(particle.position.x, particle.position.y);
 }
 
-
-
-/**
- * VISUAL MAPPING FUNCTION: Maps biological state to visible color/size (HSB).
- */
-function getCellColor(cellType, stage) {
-    let hue = 200; // Default ESC blue
-    let saturation = 80;
-
-    if (cellType === 'CardioPrecursor') {
-        hue = 15;     // Red/Orange Hue for Cardiomyocytes
-        saturation = 90;
-    } else if (cellType === 'Endothelial') {
-        hue = 200;    // Blueish hue for blood vessel lining
-        saturation = 70;
-    }
-
-    let brightness = map(stage, ['Naive', 'Committed', 'Specialized'], [60, 95, 100]);
-    return [hue, saturation];
-}
