@@ -22,3 +22,5 @@ const CONSTANTS = {
     SPECIALIZATION_FRAMES: 240,       // ~4s at 60fps of being Committed
     SPECIALIZATION_NEIGHBOR_COUNT: 5  // same-type neighbors that fast-track specialization
 };
+
+

@@ -1,7 +1,8 @@
 // js/sketch.js: The main loop that runs everything.
 
 let particles = [];
-
+let hoveredParticle = null;
+let isPaused = false;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -25,6 +26,16 @@ function setup() {
     for (let i = 0; i < initialCount; i++) {
         particles.push(new Particle(random(width), random(height), 'ESC'));
     }
+
+    const pauseButton = document.getElementById('pauseButton');
+    const resetButton = document.getElementById('resetButton');
+    if (pauseButton) {
+        pauseButton.addEventListener('click', togglePause);
+    }
+    if (resetButton) {
+        resetButton.addEventListener('click', resetSimulation);
+    }
+
     console.log("--- TheStammzelle Simulation Engine Initialized ---");
 }
 
@@ -60,37 +71,101 @@ function getCellColor(cellType, stage) {
     return [hue, saturation, brightness];
 }
 
-
 function draw() {
     background(220, 40, 12, 20);
 
     renderAllSignalSources(); // draw niche glows BEFORE particles so cells render on top
 
+    hoveredParticle = null;
     let newParticles = [];
 
     for (let particle of particles) {
-        particle.update();
-        particle.checkCollisions(particles);
+        const distanceToMouse = dist(mouseX, mouseY, particle.position.x, particle.position.y);
+        if (distanceToMouse < 14) {
+            hoveredParticle = particle;
+        }
+
+        if (!isPaused) {
+            particle.update();
+            particle.checkCollisions(particles);
+        }
 
         if (particle.isAlive()) {
-            drawParticle(particle);
+            drawParticle(particle, hoveredParticle === particle);
             newParticles.push(particle);
         }
     }
 
-    if (random() < 0.03 && newParticles.length < 100) {
+    if (!isPaused && random() < 0.03 && newParticles.length < 100) {
         newParticles.push(new Particle(random(width), random(height), 'ESC'));
     }
 
     particles = newParticles;
 }
 
-function drawParticle(particle) {
+function drawParticle(particle, isHovered = false) {
     let [hue, saturation, brightness] = getCellColor(particle.cellType, particle.stage);
     const alpha = constrain(140 * (particle.energy / CONSTANTS.MAX_ENERGY), 20, 140);
+
+    if (isHovered) {
+        noFill();
+        stroke(0, 0, 100, 120);
+        strokeWeight(1.2);
+        ellipse(particle.position.x, particle.position.y, particle.radius * 6, particle.radius * 6);
+    }
 
     stroke(hue, saturation, brightness, alpha);
     strokeWeight(max(1, particle.radius * 0.9));
     point(particle.position.x, particle.position.y);
+}
+
+function togglePause() {
+    isPaused = !isPaused;
+    const pauseButton = document.getElementById('pauseButton');
+    if (pauseButton) {
+        pauseButton.textContent = isPaused ? 'Resume' : 'Pause';
+    }
+}
+
+function resetSimulation() {
+    particles = [];
+    const initialCount = min(90, max(30, floor(width / 12)));
+    for (let i = 0; i < initialCount; i++) {
+        particles.push(new Particle(random(width), random(height), 'ESC'));
+    }
+    hoveredParticle = null;
+    isPaused = false;
+    const pauseButton = document.getElementById('pauseButton');
+    if (pauseButton) {
+        pauseButton.textContent = 'Pause';
+    }
+}
+
+function cycleCellType(currentType) {
+    const types = ['ESC', 'CardioPrecursor', 'Endothelial'];
+    const currentIndex = types.indexOf(currentType);
+    const nextIndex = (currentIndex + 1) % types.length;
+    return types[nextIndex];
+}
+
+function mousePressed() {
+    let clickedParticle = null;
+
+    for (let particle of particles) {
+        const distanceToMouse = dist(mouseX, mouseY, particle.position.x, particle.position.y);
+        if (distanceToMouse < 14) {
+            clickedParticle = particle;
+            break;
+        }
+    }
+
+    if (clickedParticle) {
+        clickedParticle.cellType = cycleCellType(clickedParticle.cellType);
+        clickedParticle.stage = 'Naive';
+        clickedParticle.energy = 100;
+        clickedParticle.radius = 3;
+    } else {
+        particles.push(new Particle(mouseX, mouseY, 'ESC'));
+    }
 }
 
