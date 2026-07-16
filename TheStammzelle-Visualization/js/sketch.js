@@ -1,9 +1,14 @@
-// js/sketch.js: The main loop that runs everything.
+// js/sketch.js: Main simulation loop and front-end interaction layer.
+// NEXT STEP: Add richer UI controls for signal strength, particle count, and lineage state.
 
 let particles = [];
 let hoveredParticle = null;
 let isPaused = false;
+let draggedSignalSource = null;
 
+/**
+ * SETUP: Runs ONLY ONCE when the page loads. Use this for initialization.
+ */
 function setup() {
     createCanvas(windowWidth, windowHeight);
 
@@ -57,9 +62,6 @@ function getCellColor(cellType, stage) {
         saturation = 70;
     }
 
-    // Fixed: map() was being called with array args (invalid p5 signature),
-    // so brightness was computed then silently dropped. Now it's a real
-    // stage → brightness lookup, and it's actually returned/used.
     let brightness;
     switch (stage) {
         case 'Naive': brightness = 60; break;
@@ -71,6 +73,9 @@ function getCellColor(cellType, stage) {
     return [hue, saturation, brightness];
 }
 
+/**
+ * DRAW: Runs repeatedly (e.g., 60 times per second). This is the simulation loop.
+ */
 function draw() {
     background(220, 40, 12, 20);
 
@@ -79,6 +84,7 @@ function draw() {
     hoveredParticle = null;
     let newParticles = [];
 
+    // ---  THE CORE PHYSICS LOOP STARTS HERE ---
     for (let particle of particles) {
         const distanceToMouse = dist(mouseX, mouseY, particle.position.x, particle.position.y);
         if (distanceToMouse < 14) {
@@ -149,6 +155,14 @@ function cycleCellType(currentType) {
 }
 
 function mousePressed() {
+    for (const source of SIGNAL_SOURCES) {
+        const distanceToMouse = dist(mouseX, mouseY, source.x, source.y);
+        if (distanceToMouse < source.radius * 0.35) {
+            draggedSignalSource = source;
+            return;
+        }
+    }
+
     let clickedParticle = null;
 
     for (let particle of particles) {
@@ -167,5 +181,16 @@ function mousePressed() {
     } else {
         particles.push(new Particle(mouseX, mouseY, 'ESC'));
     }
+}
+
+function mouseDragged() {
+    if (draggedSignalSource) {
+        draggedSignalSource.x = mouseX;
+        draggedSignalSource.y = mouseY;
+    }
+}
+
+function mouseReleased() {
+    draggedSignalSource = null;
 }
 

@@ -1,6 +1,11 @@
-// js/Particle.js: Defines what a single cell is, its properties, and its behavior over time.
+// js/Particle.js: Defines each cell's state, movement, and lineage progression.
+// NEXT STEP: Add more explicit cell-state labels and richer visual feedback for commitment/specialization.
 
-
+/**
+ * ==============================================================
+ * === I. CLASS DEFINITION: Defines the particle (MUST BE FIRST) ==
+ * ==============================================================
+ */
 
 class Particle {
     constructor(x, y, cellType) {

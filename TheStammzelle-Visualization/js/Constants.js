@@ -1,4 +1,5 @@
-// js/Constants.js: Stores fixed values used by the simulation.
+// js/Constants.js: Stores fixed values, signal-source anchors, and shared simulation constants.
+// NEXT STEP: Centralize more tuning values here so the simulation is easier to balance.
 
 const CARDIO_SIGNAL_SOURCE = { x: 0.65, y: 0.35 };
 const ENDO_SIGNAL_SOURCE = { x: 0.2, y: 0.7 };

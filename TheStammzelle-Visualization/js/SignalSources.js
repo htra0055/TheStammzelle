@@ -1,6 +1,6 @@
 
-// js/SignalSources.js
-// Fixed coordinate origins acting as hormone pumps / niche zones.
+// js/SignalSources.js: Defines the two environmental signal gradients that attract and guide cells.
+// NEXT STEP: Add adjustable strength and radius controls so each gradient can be tuned interactively.
 /** 
  * 
  * 

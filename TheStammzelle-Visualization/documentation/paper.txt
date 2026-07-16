@@ -1,0 +1,9 @@
+
+My inspiration: ASTROPHAGE in PROJECT HAIL MARY
+
+
+1. https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006577
+Agent-based modeling of morphogenetic systems: Advantages and challenges
+Chad M. Glen,Melissa L. Kemp ,Eberhard O. Voit 
+Published: March 28, 2019
+https://doi.org/10.1371/journal.pcbi.1006577
